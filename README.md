@@ -14,7 +14,7 @@ This project demonstrates integrating Plivo's audio streaming with OpenAI's Real
 ### Prerequisites
 To use the app, you will  need:
 
-- **Node.js** We used \`22.6.0\` for development; download from [here](https://nodejs.org/).
+- **Python** We used \`3.10.5\` for development; download from [here](https://www.python.org/downloads/).
 - **A Plivo account.** You can sign up for a free trial [here](https://console.plivo.com/accounts/request-trial/).
 - **A Plivo number with _Voice_ capabilities.** [Here are instructions](https://www.plivo.com/docs/numbers/guides/buy-a-number/) to purchase a phone number.
 - **An OpenAI account and an OpenAI API Key.** You can sign up [here](https://platform.openai.com/).
@@ -40,7 +40,7 @@ Keep in mind that each time you run the `ngrok http` command, a new URL will be 
 
 ### 2. Install required packages: 
 ```
-npm install
+pip install -r requirements.txt
 ```
 
 ### 3. Update the .env file
@@ -70,7 +70,7 @@ OPENAI_API_KEY=<YOUR_OPEN_AI_API_KEY>
 ## Run the app
 Once ngrok is running, dependencies are installed,  `.env` is set up, run the dev server with the following command:
 ```
-node index.js
+python server.py
 ```
 
 With the development server running, Call will be initiated automatically to the `PLIVO_TO_NUMBER`. After the call is answered, you should be able to talk to the AI Assistant. Have fun!
