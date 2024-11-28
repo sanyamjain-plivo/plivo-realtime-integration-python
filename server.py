@@ -7,9 +7,12 @@ import base64
 from dotenv import load_dotenv
 import os
 
-load_dotenv()
+load_dotenv(dotenv_path='.env', override=True)
 
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+if not OPENAI_API_KEY:
+    raise ValueError("OPENAI_API_KEY environment variable is not set. Please add it to your .env file")
+
 PORT = 5000
 SYSTEM_MESSAGE = (
     "You are a helpful and a friendly AI assistant who loves to chat about anything the user is interested about."
@@ -74,6 +77,7 @@ async def receive_from_plivo(plivo_ws, openai_ws):
                 await openai_ws.send(json.dumps(audio_append))
             elif data['event'] == "start":
                 print('Plivo Audio stream has started')
+                plivo_ws.stream_id = data['start']['streamId']
 
     except websockets.ConnectionClosed:
         print('Connection closed for the plivo audio streaming servers')
@@ -121,6 +125,11 @@ async def receive_from_openai(message, plivo_ws, openai_ws):
                 
         elif response['type'] == 'input_audio_buffer.speech_started':
             print('speech is started')
+            clear_audio_data = {
+                "event": "clearAudio",
+                "stream_id": plivo_ws.stream_id
+            }
+            await plivo_ws.send(json.dumps(clear_audio_data))
             cancel_response = {
                 "type": "response.cancel"
             }
